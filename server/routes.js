@@ -1,4 +1,3 @@
-// import { getParticipants, addParticipant, delParticipant } from './controller/participants.js';
 import { addHouse, getHouseDetails, updateHouse } from './controller/houses.js';
 
 export const addHouseRoute = async (req, res) => {
