@@ -1,9 +1,9 @@
 
-
+//validation on new house fields
 export default async function validateHouse(body) {
     try {
-        if (!body.address || !body.currentValue) {
-            throw { message: 'missing address or current value', status: 401 }
+        if (!body.address || !body.currentValue || !body.loanAmount) {
+            throw { message: 'missing address or current value or loan Amount', status: 401 }
         }
         if (typeof body.currentValue !== 'number')
             throw { message: 'current value should be number', status: 401 }

@@ -24,7 +24,7 @@ function EditHousetable() {
 
     useEffect(() => {
         const { currentValue, loanAmount } = houseDetails;
-        if (currentValue && loanAmount) {
+        if (currentValue && loanAmount && !isAddPage) {
             setHouse({ currentValue, loanAmount });
         }
     }, [houseDetails]);

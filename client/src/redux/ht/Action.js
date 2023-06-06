@@ -22,16 +22,9 @@ const API_BASE_URL = 'http://localhost:8080'
 export const RequestsApi = async (method, url, body) => {
     const apiUrl = url ? `${API_BASE_URL}/${url}` : API_BASE_URL;
 
-    const token = localStorage.getItem('token')
-    const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-    };
-
     let axiosConfig = {
         method,
         url: apiUrl,
-        headers,
     };
     if (method === 'GET') {
         axiosConfig = {
@@ -47,6 +40,7 @@ export const RequestsApi = async (method, url, body) => {
     return await axios(axiosConfig);
 };
 
+//add House
 export const addHouse = (house, status) => async (dispatch) => {
     try {
         const response = await RequestsApi('POST', 'api/houses', house);
@@ -58,6 +52,7 @@ export const addHouse = (house, status) => async (dispatch) => {
     }
 };
 
+//get House by id
 export const getHouseDetails = (status) => async (dispatch, state) => {
     const houseId = state()?.VcReducers?.houseID
     try {
@@ -69,6 +64,7 @@ export const getHouseDetails = (status) => async (dispatch, state) => {
         status && status(false)
     }
 };
+//update House details by id
 export const updateHouseDetails = (house, status) => async (dispatch, state) => {
 
     const houseId = state()?.VcReducers?.houseID
