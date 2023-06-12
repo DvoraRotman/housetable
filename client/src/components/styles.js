@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         borderRadius: theme.spacing(1),
     },
+
     detailsTitle: {
         fontWeight: 700,
         marginBottom: theme.spacing(2),
@@ -48,11 +49,15 @@ const useStyles = makeStyles((theme) => ({
     detailsText: {
         marginBottom: theme.spacing(1),
     },
+    dialogError: {
+        color: 'red',
+    },
     riskTitle: {
-        fontWeight: 700,
-        fontSize: '24px',
-        textAlign: 'center',
-        margin: theme.spacing(2, 0),
+        color: theme.palette.primary.main,
+        // fontWeight: 700,
+        fontSize: '50px',
+        // textAlign: 'center',
+        // margin: theme.spacing(2, 0),
     },
 }));
 export default useStyles;

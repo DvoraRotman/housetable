@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Button,
     Card,
@@ -7,23 +7,42 @@ import {
     Typography,
 } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import useStyles from './styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getHouseDetails, setMessage } from '../redux/ht/Action';
 import Header from './HousetableHeader';
+import useStyles from './styles';
 
 function HousetableDetails() {
 
     const classes = useStyles();
+
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const { houseID } = useParams();
+    const [houseDetailsStatus, setHouseDetailsStatus] = useState(false);
 
     const houseDetails = useSelector((state) => state?.VcReducers?.houseDetails);
 
+    // to change the state of the form 
+    const toggleDetails = () => {
+        setHouseDetailsStatus(!houseDetailsStatus);
+    };
+    // navigate to edit house 
     const handleEdit = () => {
-        navigate("/housetable?pageTitle=edit");
-
+        navigate(`/housetable/${houseID}`);
     };
 
+    // get home details when refreshing
+    useEffect(() => {
+        try {
+            dispatch(getHouseDetails(houseID, toggleDetails));
+        } catch (error) {
+            console.log(error);
+        }
+
+    }, []);
     return (
         <>
             <div className={classes.root}>
@@ -40,27 +59,15 @@ function HousetableDetails() {
                         >
                             Edit Details House
                         </Button>
-                        <Grid container direction="column" spacing={2} className={classes.detailsContainer}>
-
-                            <Grid item>
-                                <Typography className={classes.detailsText} variant="body1">
-                                    ID: {houseDetails?.id}
-                                </Typography>
-                                <Typography className={classes.detailsText} variant="body1">
-                                    Address: {houseDetails?.address
-                                    }
-                                </Typography>
-                                <Typography className={classes.detailsText} variant="body1">
-                                    Current Value: {houseDetails?.currentValue}
-                                </Typography>
-                                <Typography className={classes.detailsText} variant="body1">
-                                    Loan Amount: {houseDetails?.loanAmount}
-                                </Typography>
-                            </Grid>
-                            <Typography className={classes.riskTitle} variant="h6">
-                                Risk: {houseDetails?.risk}
-                            </Typography>
-                        </Grid>
+                        {houseDetailsStatus && <Grid container direction="column" spacing={2} className={classes.detailsContainer}  >
+                            {Object.keys(houseDetails).map((key) => (
+                                <Grid item key={key}>
+                                    <Typography className={key === 'Risk' ? classes.riskTitle : classes.detailsText} >
+                                        {[key]}:  {houseDetails[key]}
+                                    </Typography>
+                                </Grid>
+                            ))}
+                        </Grid>}
                     </CardContent>
                 </Card>
             </div>

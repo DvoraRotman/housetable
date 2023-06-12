@@ -21,7 +21,9 @@ export async function getHouseDetails(id) {
         const houseDetails = await houses.getHouse(id)
         if (!houseDetails)
             throw { message: 'id does not exist', status: 401 };
-        return houseDetails
+        let obj =
+            { Id: houseDetails.id, "Current Value": houseDetails.currentValue, "Loan Amount": houseDetails.loanAmount, Address: houseDetails.address, Risk: houseDetails.risk }
+        return obj
     } catch (error) {
         throw error;
     }

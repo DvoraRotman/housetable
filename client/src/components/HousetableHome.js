@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
     Button,
     Card,
@@ -8,31 +8,36 @@ import {
 import { Add as AddIcon } from '@material-ui/icons';
 import useStyles from './styles';
 import Header from './HousetableHeader';
+import EditHousetable from './HousetableEdit';
 
 function HousetableHome() {
 
     const classes = useStyles();
-    const navigate = useNavigate();
+    const { houseID } = useParams();
 
-    const handleEdit = () => {
-        navigate("/housetable?pageTitle=add");
+    const [isExpanded, setIsExpanded] = useState(houseID ? true : false);
+
+    //to change the state of the form to add a house or to edit an existing house
+    const toggleExpansion = () => {
+        setIsExpanded(!isExpanded);
     };
 
     return (
         <div className={classes.root}>
             <Card className={classes.card}>
-                <Header title={"Welcome to "} />
+                <Header title={!isExpanded ? "Welcome to " : houseID ? "Edit Details" : "Add"} />
                 <CardContent>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        startIcon={<AddIcon />}
-                        onClick={handleEdit}
-                        className={classes.addButton}
-                    >
-                        Add House
-                    </Button>
-
+                    {!isExpanded ?
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            startIcon={<AddIcon />}
+                            onClick={toggleExpansion}
+                            className={classes.addButton}
+                        >
+                            Add House
+                        </Button>
+                        : <EditHousetable toggleExpansion={toggleExpansion} />}
                 </CardContent>
             </Card>
 
