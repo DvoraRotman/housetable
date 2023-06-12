@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
     Button,
     Dialog as MaterialDialog,
@@ -11,21 +11,24 @@ import {
 import { Add as AddIcon } from '@material-ui/icons';
 import useStyles from './styles';
 
-function HouseDialog({ open, handleToggle, isAddPage }) {
-    const navigate = useNavigate();
+function HouseDialog({ open, toggleDialog, isAddPage, houseID }) {
+
     const classes = useStyles();
 
-    const houseID = useSelector((state) => state?.VcReducers?.houseID);
+    const navigate = useNavigate();
 
+    const houseIDReducers = useSelector((state) => state?.VcReducers?.houseID);
+
+    // navigate to house details
     const handleDetails = () => {
-        navigate("/housetable/details");
+        navigate(`/housetableDetails/${houseID ?? houseIDReducers}`);
     };
 
     return (
-        <MaterialDialog open={open} onClose={handleToggle} className={classes.dialog}>
+        <MaterialDialog open={open} onClose={toggleDialog} className={classes.dialog}>
             <DialogTitle className={classes.dialogTitle}>The risk calculation was carried out successfully</DialogTitle>
             <DialogContent className={classes.dialogContent}>
-                {isAddPage && <DialogContentText >Newly created house's ID {houseID}</DialogContentText>}
+                {isAddPage && <DialogContentText >Newly created house's ID {houseIDReducers}</DialogContentText>}
                 <Button
                     variant="contained"
                     color="primary"
@@ -33,7 +36,7 @@ function HouseDialog({ open, handleToggle, isAddPage }) {
                     onClick={handleDetails}
                     className={classes.button}
                 >
-                    Click to see the house details
+                    {`Click to see ${!isAddPage ? 'updated ' : ''}the house details`}
                 </Button>
             </DialogContent>
         </MaterialDialog>

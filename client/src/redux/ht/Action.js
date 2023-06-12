@@ -41,38 +41,40 @@ export const RequestsApi = async (method, url, body) => {
 };
 
 //add House
-export const addHouse = (house, status) => async (dispatch) => {
+export const addHouse = (house, toggleDialog) => async (dispatch) => {
+
     try {
         const response = await RequestsApi('POST', 'api/houses', house);
         dispatch(setHouseId(response?.data?.houseId));
-        dispatch(getHouseDetails(status))
+        toggleDialog && toggleDialog()
     } catch (error) {
         dispatch(setMessage(error?.response?.data?.message));
-        status(false)
     }
 };
 
 //get House by id
-export const getHouseDetails = (status) => async (dispatch, state) => {
-    const houseId = state()?.VcReducers?.houseID
+export const getHouseDetails = (id, toggleDialog) => async (dispatch, state) => {
+
+    const houseId = id ?? state()?.VcReducers?.houseID
+
     try {
         const response = await RequestsApi('GET', `api/houses/${houseId}`);
         dispatch(setHouseDetails(response?.data?.houseDetails));
-        status && status(true)
+        toggleDialog && toggleDialog()
+
     } catch (error) {
+
         dispatch(setMessage(error?.response?.data?.message))
-        status && status(false)
+
     }
 };
 //update House details by id
-export const updateHouseDetails = (house, status) => async (dispatch, state) => {
-
-    const houseId = state()?.VcReducers?.houseID
+export const updateHouseDetails = (house, toggleDialog) => async (dispatch, state) => {
     try {
-        await RequestsApi('PUT', `api/houses/${houseId}`, house);
-        dispatch(getHouseDetails(status))
+        await RequestsApi('PUT', `api/houses/${house.id}`, house);
+        toggleDialog()
     } catch (error) {
         dispatch(setMessage(error?.response?.data?.message))
-        status && status(false)
+
     }
 };
